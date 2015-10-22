@@ -141,17 +141,21 @@ def itraceSystemTimes(xmldoc):
 
 def mylynTimes(root):
     mTime=[0,0]
+    startTime=[]
+    eStartTime=[]
+    endTime=[]
+    eEndTime=[]
     t=0
     for k in root.findall('InteractionEvent'):
-        if t==0:
-            mStart = k.get('StartDate')
-            #print "Mylyn start :",mStart, "| Epoch: ",timeToEpoch(mStart)
-            t=1
-        mEnd = k.get('EndDate')
+        eStartTime.append(timeToEpoch(k.get('StartDate')))
+        startTime.append(k.get('StartDate'))
+        #print "Mylyn start :",mStart, "| Epoch: ",timeToEpoch(mStart)
+        eEndTime.append(timeToEpoch(k.get('EndDate')))
+        endTime.append(k.get('EndDate'))
     #print "Mylyn End :",mEnd, "| Epoch: ",timeToEpoch(mEnd)
-    
-    mTime[0]=mStart
-    mTime[1]=mEnd
+    #print epochToTime(min(startTime)),epochToTime(max(endTime))
+    mTime[0]=startTime[eStartTime.index(min(eStartTime))]
+    mTime[1]=endTime[eEndTime.index(max(eEndTime))]
     
     return mTime
 
@@ -285,8 +289,8 @@ for folder in SubDirPath(os.getcwd()):
                             
                             
                             n=n+1
-
-
+                            if n == 5:
+                                break
 
 
 #else:
@@ -308,6 +312,6 @@ for folder in SubDirPath(os.getcwd()):
 
 
 
-book.save("timeMysterySolver.xls")
+book.save("timeMysterySolverUpgrade.xls")
 
 print "--> Total Overlapping files: ", oFiles
